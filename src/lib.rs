@@ -23,6 +23,15 @@ pub struct FiniteStateMachine<S, A, T> {
     transition: PhantomData<T>,
 }
 
+impl<S, A, T> Default for FiniteStateMachine<S, A, T>
+where
+    S: Status<Status = S>,
+{
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<S, A, T> FiniteStateMachine<S, A, T>
 where
     S: Status<Status = S>,
@@ -107,7 +116,7 @@ mod fsa {
         for i in 1..=16 {
             let expect = (i & (i - 1)) == 0;
             let input = encode(i);
-            let mut fsa: FiniteStateMachine<S, A, T> = FiniteStateMachine::new();
+            let mut fsa: FiniteStateMachine<S, A, T> = FiniteStateMachine::default();
             let output = fsa.execute(&input);
             assert_eq!(output, expect);
         }
